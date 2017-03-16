@@ -11,7 +11,7 @@ class EnvVarExtenderPlugin extends RunSpecTaskProcessor with PluginConfiguration
     envVariables = (configuration \ "env").as[Map[String, String]]
   }
 
-  def apply(runSpec: mesosphere.marathon.plugin.RunSpec, builder: org.apache.mesos.Protos.TaskInfo.Builder): Unit = {
+  def taskInfo(appSpec: mesosphere.marathon.plugin.ApplicationSpec, builder: org.apache.mesos.Protos.TaskInfo.Builder): Unit = {
     val envBuilder = builder.getCommand.getEnvironment.toBuilder
     envVariables.foreach {
       case (key, value) =>
@@ -24,4 +24,8 @@ class EnvVarExtenderPlugin extends RunSpecTaskProcessor with PluginConfiguration
     commandBuilder.setEnvironment(envBuilder)
     builder.setCommand(commandBuilder)
   }
+
+  def taskGroup(podSpec: mesosphere.marathon.plugin.PodSpec, executor: org.apache.mesos.Protos.ExecutorInfo.Builder, taskGroup: org.apache.mesos.Protos.TaskGroupInfo.Builder): Unit = {
+  }
+
 }
